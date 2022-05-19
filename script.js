@@ -1,7 +1,10 @@
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
 //Global Variables
-
-
 let rootContainer = document.getElementsByClassName('mainContainer')[0];
 let leftContainer = document.getElementsByClassName('leftColumnContainer')[0];
 let rightContainer = document.getElementsByClassName('rightColumnContainer')[0];
@@ -17,7 +20,7 @@ let correctOptionIndex = [2, 2, 1];
 
 //Controlls - Global Variables
 let checkboxArray = ["Show  Gravity", "Show  Tension", "Show  Velocity"];
-
+let sliderArray = ["Set Total Energy🚀", "Set Mass"];
 
 class QuestionColumn {
     constructor(questionNumber) {
@@ -153,7 +156,6 @@ class QuestionColumn {
                 rootElement.optionContainer[correctOptionIndex[questionNumber]].appendChild(rootElement.tickMark);
                 rootElement.tickMark.src = `./assets/Checkbox.png`;
                 rootElement.tickMark.classList.add('tickmark');
-
             }
         }
         this.hintButton.onclick = function () {
@@ -171,52 +173,123 @@ class ControlsColumn {
         this.titleDiv.classList.add('titleSim');
         this.titleDiv.innerText = titleName;
 
-        //Options + Label
+        //break
+        this.break1 = document.createElement('br');
+        leftContainer.appendChild(this.break1);
+
+        //Checkbox + Label
         let chkBoxCount = checkboxArray.length;
         this.controlContainer = [];
         this.checkboxes = [];
         this.checkboxLabel = [];
 
-        for (let i = 0; i < n; i++) {
-            //Option Container Div(for each option)
+        for (let i = 0; i < chkBoxCount; i++) {
+            //Checkbox Container Div(for each Checkbox)
             this.controlContainer[i] = document.createElement('DIV');
             leftContainer.appendChild(this.controlContainer[i]);
-            this.controlContainer[i].classList.add('optionsContainerClass');
+            this.controlContainer[i].classList.add('controllsContainerClass');
 
-            //Option
+            //Checkbox
             this.checkboxes[i] = document.createElement('input');
             this.controlContainer[i].appendChild(this.checkboxes[i]);
-            this.checkboxes[i].setAttribute('type', 'radio');
-            this.checkboxes[i].setAttribute('value', optionArray[questionNumber][i]);
-            this.checkboxes[i].setAttribute('name', "options");
-            this.checkboxes[i].setAttribute('id', questionNumber + i.toString());
-            this.checkboxes[i].classList.add('radioButton');
+            this.checkboxes[i].setAttribute('type', 'checkbox');
+            this.checkboxes[i].setAttribute('value', checkboxArray[i]);
+            this.checkboxes[i].setAttribute('name', "chkbox");
+            this.checkboxes[i].setAttribute('id', "chkbox" + i.toString());
+            this.checkboxes[i].classList.add('checkboxClass');
 
             //Label
             this.checkboxLabel[i] = document.createElement('label');
             this.controlContainer[i].appendChild(this.checkboxLabel[i]);
-            this.checkboxLabel[i].setAttribute('for', questionNumber + i.toString());
-            this.checkboxLabel[i].innerText = optionArray[questionNumber][i];
-            this.checkboxLabel[i].classList.add('radioLabel');
+            this.checkboxLabel[i].setAttribute('for', "chkbox" + i.toString());
+            this.checkboxLabel[i].innerText = checkboxArray[i];
+            this.checkboxLabel[i].classList.add('checkboxLabel');
 
             //break
             this.break1 = document.createElement('br');
             leftContainer.appendChild(this.break1);
 
         }
+        //Slider + Label
+        let sliderCount = sliderArray.length;
+        // this.controlContainer = [];
+        this.sliders = [];
+        this.sliderLabel = [];
+
+        for (let i = chkBoxCount; i < sliderCount + chkBoxCount; i++) {
+            //Control Container Div(for each option)
+            this.controlContainer[i] = document.createElement('DIV');
+            leftContainer.appendChild(this.controlContainer[i]);
+            this.controlContainer[i].classList.add('controllsContainerClassSlider');
+
+            //Slider
+            this.sliders[i] = document.createElement('input');
+            this.controlContainer[i].appendChild(this.sliders[i]);
+            this.sliders[i].setAttribute('type', 'range');
+            this.sliders[i].setAttribute('min', '0');
+            this.sliders[i].setAttribute('max', '10');
+            this.sliders[i].setAttribute('step', '1');
+            this.sliders[i].setAttribute('value', "5");
+            this.sliders[i].setAttribute('name', "slider");
+            this.sliders[i].setAttribute('id', "sliderNo" + i.toString());
+            this.sliders[i].classList.add('slider');
+
+            //break
+            this.break1 = document.createElement('br');
+            leftContainer.appendChild(this.break1);
+
+            //Label
+            this.sliderLabel[i] = document.createElement('DIV');
+            this.controlContainer[i].appendChild(this.sliderLabel[i]);
+            // this.sliderLabel[i].setAttribute('for', "slider" + i.toString());
+            this.sliderLabel[i].innerText = sliderArray[i - chkBoxCount];
+            this.sliderLabel[i].classList.add('sliderLabel');
+
+            //break
+            this.break1 = document.createElement('br');
+            leftContainer.appendChild(this.break1);
+        }
+        //NEXT button
+        let NextBtnDiv;
+        this.NextBtnDiv = document.createElement("DIV");
+        rightContainer.appendChild(this.NextBtnDiv);
+        this.NextBtnDiv.innerText = ">";
+        this.NextBtnDiv.classList.add('nextBtnSymbol');
     }
 }
 
 
 class GameScene {
     constructor() {
+        //create Canvas - FILLS RIGHT CONTAINER
+        let canvas;
+        let rootElement = this;
+        this.canvas = document.createElement('canvas');
+        rightContainer.appendChild(this.canvas);
+        this.canvas.classList.add('CanvasId');
+        this.canvas.setAttribute('width', rightContainer.clientWidth.toString());
+        this.canvas.setAttribute('height', rightContainer.clientHeight.toString());
+
+        let ctx = this.canvas.getContext("2d");
+        // ctx.fillStyle = "#220099";
+        // ctx.fillRect(0, 0, rightContainer.clientWidth, rightContainer.clientHeight);
+
+        ctx.beginPath();
+        ctx.setLineDash([25, 25]);
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = "#B9B9B9";
+        ctx.beginPath();
+        ctx.arc(rightContainer.clientWidth / 2, rightContainer.clientHeight / 2.2, rightContainer.clientWidth / 5, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.stroke();
+
+
+        //create ball, arrows
+        https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/createLinearGradient
+        
 
     }
 }
-
-
-
-
 
 
 
@@ -226,8 +299,9 @@ class GameScene {
 
 window.onload = function () {
     quesNo = 0;
-    new QuestionColumn(quesNo);
-    // new ControlsColumn();
+    // new QuestionColumn(quesNo);
+    new ControlsColumn();
+    new GameScene();
 }
 
 
